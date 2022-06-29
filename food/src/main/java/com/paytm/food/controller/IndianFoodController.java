@@ -24,17 +24,16 @@ import com.paytm.food.dto.PriceDetailsResponseDto;
 import com.paytm.food.entities.IndianFoodEntity;
 import com.paytm.food.service.IndianFoodService;
 
-
 @RestController
 @RequestMapping("/indian-food")
 public class IndianFoodController {
-	
+
 	@Autowired
 	IndianFoodService indianFoodSvc;
-	
+
 	@Autowired
 	RestTemplate restTemplate;
-	
+
 	@GetMapping("/welcome-message")
 	public String getWelcomeMessage() {
 		String message = "Welcome to Indian food";
@@ -45,25 +44,24 @@ public class IndianFoodController {
 	public void createFoodItem(@RequestBody IndianFoodEntity indianFoodItem) {
 		indianFoodSvc.createFoodItem(indianFoodItem);
 	}
-	
+
 	@GetMapping("/fetch-food-items")
 	public List<IndianFoodEntity> getFoodItems() {
 		return indianFoodSvc.getFoodItems();
 	}
-	
-	
+
 	@PutMapping("/update-food-item")
 	public void updateFoodItem(@RequestBody IndianFoodEntity indianFoodItem) {
 		indianFoodSvc.updateFoodItem(indianFoodItem);
 	}
-	
+
 	@PatchMapping("/update-rating/{id}/{rating}")
-	public void updateRating(@PathVariable Long id,@PathVariable Integer rating) {
-		indianFoodSvc.updateRating(id,rating);
+	public void updateRating(@PathVariable Long id, @PathVariable Integer rating) {
+		indianFoodSvc.updateRating(id, rating);
 	}
-	
+
 	@DeleteMapping("/delete-food-item")
-	public void deleteFoodItem( @RequestBody IndianFoodEntity indianFoodEntity) {
+	public void deleteFoodItem(@RequestBody IndianFoodEntity indianFoodEntity) {
 		indianFoodSvc.deleteFoodItem(indianFoodEntity);
 	}
 
@@ -71,24 +69,25 @@ public class IndianFoodController {
 	public void deleteFoodItemById(@PathVariable Long id) {
 		indianFoodSvc.deleteFoodItemById(id);
 	}
-	
-	/*
-	 * @GetMapping("/price-details") public Integer getPriceDetails() { String url =
-	 * "http://localhost:8083/payment/total-cost"; HttpHeaders headers = new
-	 * HttpHeaders(); headers.setContentType(MediaType.APPLICATION_JSON); HttpEntity
-	 * entity = new HttpEntity(headers); Integer priceDetails =
-	 * restTemplate.exchange(url, HttpMethod.GET,entity , Integer.class).getBody();
-	 * return priceDetails; }
-	 */
-	
+//
+//	/*
+//	 * @GetMapping("/price-details") public Integer getPriceDetails() { String url =
+//	 * "http://localhost:8083/payment/total-cost"; HttpHeaders headers = new
+//	 * HttpHeaders(); headers.setContentType(MediaType.APPLICATION_JSON); HttpEntity
+//	 * entity = new HttpEntity(headers); Integer priceDetails =
+//	 * restTemplate.exchange(url, HttpMethod.GET,entity , Integer.class).getBody();
+//	 * return priceDetails; }
+//	 */
+
 	@PostMapping("/ordered-price-details")
 	public PriceDetailsResponseDto getFoodPriceDetails(@RequestBody OrderedFoodItemsRequestDto orderedFoodItems) {
 		String url = "http://localhost:8085/payment/price-details";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<PriceDetailsResponseDto> entity = new HttpEntity(orderedFoodItems,headers);
-		PriceDetailsResponseDto priceDetails = restTemplate.exchange(url, HttpMethod.POST,entity , PriceDetailsResponseDto.class).getBody();
+		HttpEntity<PriceDetailsResponseDto> entity = new HttpEntity(orderedFoodItems, headers);
+		PriceDetailsResponseDto priceDetails = restTemplate
+				.exchange(url, HttpMethod.POST, entity, PriceDetailsResponseDto.class).getBody();
 		return priceDetails;
 	}
-	
+
 }
